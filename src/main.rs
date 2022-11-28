@@ -1,6 +1,3 @@
-
-#![allow(dead_code)]
-
 mod command;
 mod todos;
 
