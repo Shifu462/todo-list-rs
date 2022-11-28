@@ -7,13 +7,11 @@ pub enum Command {
     Remove(usize),
     List,
     Save,
-
     Quit,
-    Unknown,
 }
 
 impl Command {
-    pub fn parse(input: String) -> Self {
+    pub fn parse(input: String) -> Option<Self> {
         let mut parts = input.split_whitespace();
 
         let command = parts.next().unwrap();
@@ -26,13 +24,13 @@ impl Command {
         }
 
         match command {
-            "a" | "add" => Self::Add(arg),
-            "t" | "toggle" => Self::Toggle(arg.parse().unwrap()),
-            "r" | "remove" => Self::Remove(arg.parse().unwrap()),
-            "l" | "list" => Self::List,
-            "s" | "save" => Self::Save,
-            "q" | "quit" => Self::Quit,
-            _ => Self::Unknown,
+            "a" | "add" => Some(Self::Add(arg)),
+            "t" | "toggle" => Some(Self::Toggle(arg.parse().unwrap())),
+            "r" | "remove" => Some(Self::Remove(arg.parse().unwrap())),
+            "l" | "list" => Some(Self::List),
+            "s" | "save" => Some(Self::Save),
+            "q" | "quit" => Some(Self::Quit),
+            _ => None,
         }
     }
 
@@ -44,7 +42,7 @@ impl Command {
             Command::List => todo_list.list(),
             Command::Save => todo_list.save(),
 
-            Command::Quit | Command::Unknown => panic!("this command should be handled by the main loop"),
+            Command::Quit => panic!("this command should be handled by the main loop"),
         }
 
     }

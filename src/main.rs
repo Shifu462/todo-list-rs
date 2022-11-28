@@ -23,15 +23,10 @@ fn main() {
 
         let command = Command::parse(read_line());
 
-        if command == Command::Quit {
-            break;
+        match command {
+            Some(Command::Quit) => break,
+            Some(command) => command.apply_to(&mut todo_list),
+            None => println!("Invalid command"),
         }
-
-        if command == Command::Unknown {
-            println!("Unknown command");
-            continue;
-        }
-
-        command.apply_to(&mut todo_list);
     }
 }
