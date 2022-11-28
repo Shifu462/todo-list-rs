@@ -52,13 +52,16 @@ impl TodoList {
         self.todos.remove(index);
     }
 
+    pub fn to_string(&self) -> String {
+        self.todos.iter()
+            .map(|todo| todo.to_string())
+            .collect::<Vec<String>>()
+            .join("\n")
+    }
+
     pub fn save(&self) {
         let mut file = std::fs::File::create("todos.txt").unwrap();
-
-        self.todos
-            .iter()
-            .map(|todo| todo.to_string() + '\n'.to_string().as_str())
-            .for_each(|todo| file.write_all(todo.as_bytes()).unwrap());
+        file.write_all(self.to_string().as_bytes()).unwrap();
     }
 
     pub fn list(&self) {
