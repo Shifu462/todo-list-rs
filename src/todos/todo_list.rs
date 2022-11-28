@@ -1,6 +1,5 @@
 use std::io::{Write, Read};
 
-use crate::command::Command;
 use crate::todos::todo::Todo;
 
 pub struct TodoList {
@@ -60,19 +59,6 @@ impl TodoList {
             .iter()
             .map(|todo| todo.to_string() + '\n'.to_string().as_str())
             .for_each(|todo| file.write_all(todo.as_bytes()).unwrap());
-    }
-
-
-    pub fn apply_command(&mut self, command: Command) {
-        match command {
-            Command::Add(title) => self.add(title),
-            Command::Toggle(index) => self.toggle(index),
-            Command::Remove(index) => self.remove(index),
-            Command::List => self.list(),
-            Command::Save => self.save(),
-
-            Command::Quit | Command::Unknown => panic!("this command should be handled by the main loop"),
-        }
     }
 
     pub fn list(&self) {

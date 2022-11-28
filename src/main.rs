@@ -32,7 +32,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             continue;
         }
 
-        todo_list.apply_command(command.to_owned());
+        command.apply_to(&mut todo_list);
     }
 
     Ok(())

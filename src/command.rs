@@ -1,3 +1,5 @@
+use crate::todos::TodoList;
+
 #[derive(PartialEq, Clone, Debug)]
 pub enum Command {
     Add(String),
@@ -32,5 +34,18 @@ impl Command {
             "q" | "quit" => Self::Quit,
             _ => Self::Unknown,
         }
+    }
+
+    pub fn apply_to(self, todo_list: &mut TodoList) {
+        match self {
+            Command::Add(title) => todo_list.add(title),
+            Command::Toggle(index) => todo_list.toggle(index),
+            Command::Remove(index) => todo_list.remove(index),
+            Command::List => todo_list.list(),
+            Command::Save => todo_list.save(),
+
+            Command::Quit | Command::Unknown => panic!("this command should be handled by the main loop"),
+        }
+
     }
 }
