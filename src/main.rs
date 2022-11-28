@@ -16,7 +16,10 @@ fn main() {
         .unwrap_or(TodoList::new());
 
     loop {
-        println!("What do you want to do?");
+        println!();
+        todo_list.list();
+
+        println!("\nWhat do you want to do?");
 
         let command = Command::parse(read_line());
 

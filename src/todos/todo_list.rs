@@ -63,6 +63,12 @@ impl TodoList {
 
     pub fn list(&self) {
         println!("Your todos:");
+
+        if self.todos.is_empty() {
+            println!("-- Empty --");
+            return;
+        }
+
         for (i, todo) in self.todos.iter().enumerate() {
             println!("{}. {}", i, todo.to_string());
         }
