@@ -13,7 +13,7 @@ fn read_line() -> String {
     input.trim().to_string()
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() {
     let mut todo_list = TodoList
         ::try_restore_saved()
         .unwrap_or(TodoList::new());
@@ -34,6 +34,4 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         command.apply_to(&mut todo_list);
     }
-
-    Ok(())
 }
