@@ -1,16 +1,24 @@
+use std::fmt;
+use std::str::FromStr;
+
 pub struct Todo {
     pub title: String,
     pub is_done: bool,
 }
 
-impl Todo {
-    pub fn to_string(&self) -> String {
+impl fmt::Display for Todo {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let status = if self.is_done { "x" } else { "_" };
-        return format!("[{}] {}", status, self.title);
+        write!(f, "[{}] {}", status, self.title)
     }
+}
 
-    pub fn from_string(str: String) -> Todo {
-        let mut parts = str.split_whitespace();
+impl FromStr for Todo {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut parts = s.split_whitespace();
+
         let status = parts.next().unwrap();
         let mut title = parts.next().unwrap_or("").to_string();
 
@@ -19,9 +27,10 @@ impl Todo {
             title.push_str(part);
         }
 
-        return Todo {
-            title,
-            is_done: status == "[x]",
-        };
+        match status {
+            "[_]" => Ok(Self { title, is_done: false }),
+            "[x]" => Ok(Self { title, is_done: true }),
+            _ => Err(()),
+        }
     }
 }

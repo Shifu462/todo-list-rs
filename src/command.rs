@@ -1,3 +1,4 @@
+use std::convert::TryFrom;
 use crate::todos::TodoList;
 
 #[derive(PartialEq, Clone, Debug)]
@@ -10,8 +11,10 @@ pub enum Command {
     Quit,
 }
 
-impl Command {
-    pub fn parse(input: String) -> Option<Self> {
+impl TryFrom<String> for Command {
+    type Error = ();
+
+    fn try_from(input: String) -> Result<Self, Self::Error> {
         let mut parts = input.split_whitespace();
 
         let command = parts.next().unwrap();
@@ -24,16 +27,18 @@ impl Command {
         }
 
         match command {
-            "a" | "add" => Some(Self::Add(arg)),
-            "t" | "toggle" => Some(Self::Toggle(arg.parse().unwrap())),
-            "r" | "remove" => Some(Self::Remove(arg.parse().unwrap())),
-            "l" | "list" => Some(Self::List),
-            "s" | "save" => Some(Self::Save),
-            "q" | "quit" => Some(Self::Quit),
-            _ => None,
+            "a" | "add" => Ok(Self::Add(arg)),
+            "t" | "toggle" => Ok(Self::Toggle(arg.parse().unwrap())),
+            "r" | "remove" => Ok(Self::Remove(arg.parse().unwrap())),
+            "l" | "list" => Ok(Self::List),
+            "s" | "save" => Ok(Self::Save),
+            "q" | "quit" => Ok(Self::Quit),
+            _ => Err(()),
         }
     }
+}
 
+impl Command {
     pub fn apply_to(self, todo_list: &mut TodoList) {
         match self {
             Command::Add(title) => todo_list.add(title),
@@ -44,6 +49,5 @@ impl Command {
 
             Command::Quit => panic!("this command should be handled by the main loop"),
         }
-
     }
 }

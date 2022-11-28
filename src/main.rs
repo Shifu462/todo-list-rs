@@ -21,12 +21,12 @@ fn main() {
 
         println!("\nWhat do you want to do?");
 
-        let command = Command::parse(read_line());
+        let command = Command::try_from(read_line());
 
         match command {
-            Some(Command::Quit) => break,
-            Some(command) => command.apply_to(&mut todo_list),
-            None => println!("Invalid command"),
+            Ok(Command::Quit) => break,
+            Ok(command) => command.apply_to(&mut todo_list),
+            Err(_) => println!("Invalid command"),
         }
     }
 }

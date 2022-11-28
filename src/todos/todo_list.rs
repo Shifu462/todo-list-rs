@@ -1,4 +1,4 @@
-use std::io::{Write, Read};
+use std::{io::{Write, Read}, str::FromStr};
 
 use crate::todos::todo::Todo;
 
@@ -25,12 +25,12 @@ impl TodoList {
 
         let todos: Vec<Todo> = contents.split('\n')
             .filter(|line| !line.is_empty())
-            .map(|line| Todo::from_string(line.to_string()))
+            .map(|line| Todo::from_str(&line).unwrap())
             .collect();
 
-        return Ok(
+        Ok(
             Self { todos }
-        );
+        )
     }
 
     pub fn add(&mut self, title: String) {
